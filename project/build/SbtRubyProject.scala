@@ -1,13 +1,6 @@
 import sbt._
 
 class SbtRuby(info: ProjectInfo) extends sbt.PluginProject(info) with rsync.RsyncPublishing {
-  val liftUtil = "net.liftweb" % "lift-util_2.8.0" % "2.1-M1" withSources()
-  val logula   = "com.codahale" %% "logula" % "1.0.3" withSources()
-  
-  /**
-   * Borrowed these from codahale/cassie
-   */
-
   /**
    * Include docs and source as build artifacts.
    */

@@ -34,7 +34,7 @@ trait GemBuilding extends DefaultProject {
 
     if (!gemLibDirFile.exists) { gemLibDirFile.mkdirs }
 
-    FileUtilities.copy(descendents(rubyMainDir, "*.rb").get, gemLibDir, log)
+    FileUtilities.copy(descendents(rubyMainDir ##, "*.rb").get, gemLibDir, log)
     FileUtilities.copy(List(info.projectPath / "%s.gemspec".format(gemName)), gemStagingDir, log)
     None
   } dependsOn(rubyTest, cleanGem)

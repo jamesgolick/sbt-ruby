@@ -27,6 +27,8 @@ trait GemBuilding extends DefaultProject {
   lazy val cleanGem = cleanTask(gemStagingDir) describedAs("Clean the gem staging directory.")
 
   lazy val setupGemFiles = task {
+    emitGemspec.run
+
     val gemLibDir     = gemStagingDir / "lib"
     val gemLibDirFile = new File(gemLibDir.toString)
 
@@ -35,7 +37,7 @@ trait GemBuilding extends DefaultProject {
     FileUtilities.copy(descendents(rubyMainDir, "*.rb").get, gemLibDir, log)
     FileUtilities.copy(List(info.projectPath / "%s.gemspec".format(gemName)), gemStagingDir, log)
     None
-  } dependsOn(rubyTest, cleanGem, emitGemspec)
+  } dependsOn(rubyTest, cleanGem)
 
   lazy val buildGem = execTask {
     val pb = new java.lang.ProcessBuilder("gem", "build", gemspecFilename)
@@ -44,8 +46,8 @@ trait GemBuilding extends DefaultProject {
   } dependsOn(setupGemFiles) describedAs("Builds the gem.")
 
   lazy val installGem = execTask {
-    val pb = new java.lang.ProcessBuilder("gem", "install", "%s-%s.gem".format(gemName, projectVersion))
-    pb.directory(new File(rubyTargetDir.toString))
+    val pb = new java.lang.ProcessBuilder("gem", "install", "%s-%s.gem".format(gemName, gemVersion))
+    pb.directory(new File(gemStagingDir.toString))
     pb
   } dependsOn(buildGem) describedAs("Installs the gem.")
 

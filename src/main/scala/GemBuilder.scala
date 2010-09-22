@@ -63,7 +63,7 @@ trait GemBuilding extends DefaultProject {
 
   private def buildGemspec: String = {
     val dependencies = gemDependencies.map { case (name, version) =>
-      "  s.add_dependency(%s, %s)".format(name, version)
+      """  s.add_dependency("%s", "%s")""".format(name, version)
     }.mkString("\n")
     """Gem::Specification.new do |s|
   s.name    = "%s"

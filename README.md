@@ -9,7 +9,7 @@ Depend on sbt-ruby in project/plugins/Plugins.scala:
 
     class Plugins(info: sbt.ProjectInfo) extends sbt.PluginDefinition(info) {
       val jamesgolickRepo = "James Golick's Repository" at "http://repo.jamesgolick.com/"
-      val sbtRuby         = "com.protose" % "sbt-ruby" % "1.0"
+      val sbtRuby         = "com.bitlove" % "sbt-ruby" % "1.0.6"
     }
     
 Then, add the GemBuilding trait to your project definition. At the very least, you have to define gemAuthor and gemAuthorEmail.

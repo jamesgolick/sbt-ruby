@@ -19,8 +19,7 @@ trait GemBuilding extends DefaultProject {
 
   lazy val rubyTest = execTask {
     val pb   = new java.lang.ProcessBuilder("spec", rubyTestDir.toString)
-    val jars = allJars.getFiles.filter(_.getName.endsWith(".jar")).map { s => "-r%s".format(s) }.mkString(" ")
-    pb.environment.put("RUBYOPT", "-rubygems -I%s -I%s %s".format(rubyMainDir, outputPath, jars))
+    pb.environment.put("RUBYOPT", "-rubygems -I%s -I%s".format(rubyMainDir, outputPath))
     pb
   } dependsOn(`package`) describedAs("Run the ruby specs.")
 
@@ -84,21 +83,4 @@ trait GemBuilding extends DefaultProject {
 end
 """.format(gemName, gemVersion, gemAuthor, gemAuthorEmail, gemspecFilename, dependencies)
   }
-
-  /**
-  * In the classpath:
-  *  - all dependencies (via Ivy/Maven and in lib)
-  *  - package classes
-  * On the filesystem:
-  *  - scripts
-  *  - config
-  */
-  private def allJars = (
-    ((outputPath ##) / defaultJarName) +++
-    mainResources +++
-    mainDependencies.scalaJars +++
-    descendents(info.projectPath / "lib" ##, "*.jar") +++
-    descendents(info.projectPath / "lib_managed" / "scala_2.8.0" / "compile" ##, "*.jar") +++
-    descendents(managedDependencyRootPath / "compile" ##, "*.jar")
-  )
 }

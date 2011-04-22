@@ -50,6 +50,12 @@ trait GemBuilding extends DefaultProject {
     pb
   } dependsOn(buildGem) describedAs("Installs the gem.")
 
+  lazy val publishGem = execTask {
+    val pb = new java.lang.ProcessBuilder("gem", "push", "%s-%s.gem".format(gemName, gemVersion))
+    pb.directory(new java.io.File(gemStagingDir.toString))
+    pb
+  } dependsOn(buildGem) describedAs("Publishes the gem using `gem push`")
+
   lazy val emitGemspec = task {
     val gemspecFile = new File((gemStagingDir / gemspecFilename).toString)
     FileUtilities.write(gemspecFile, buildGemspec, log)
